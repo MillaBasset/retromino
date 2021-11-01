@@ -636,7 +636,7 @@ Game.prototype.gameOverTest = function () {
 		if (this.matrix[this.activePiece.position + this.activePiece.offsets[this.activePiece.orientation][i]] != 0) {
 			this.gameOver = true;
 			audio.play(audio.gameOver);
-			setTimeout(function(){ ui.showGameOverDiv(); }, 1000);
+			setTimeout(function(){ ui.showGameOverDiv(); }, 0);
 		}
 	}
 };
