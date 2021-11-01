@@ -454,8 +454,10 @@ Game.prototype.moveDown = function () {
 };
 
 Game.prototype.rotateClockwise = function () {
-	if (this.canRotateClockwise()) {
+	let offset = this.canRotateClockwise();
+	if (offset !== false) {
 		this.activePiece.orientation = (this.activePiece.orientation + 1) % 4;
+		this.activePiece.position += offset;
 		this.activePiece.hasNotBeenRendered = true;
 		return true;
 	} else {
@@ -464,8 +466,10 @@ Game.prototype.rotateClockwise = function () {
 };
 
 Game.prototype.rotateCounterClockwise = function () {
-	if (this.canRotateCounterClockwise()) {
+	let offset = this.canRotateCounterClockwise();
+	if (offset !== false) {
 		this.activePiece.orientation = (this.activePiece.orientation + 3) % 4;
+		this.activePiece.position += offset;
 		this.activePiece.hasNotBeenRendered = true;
 		return true;
 	} else {
@@ -498,19 +502,43 @@ Game.prototype.canMoveDown = function () {
 };
 
 Game.prototype.canRotateClockwise = function () {
+	/*
 	if (this.isPossible(1,0)) {
 		return true;
 	} else {
 		return false;
 	}
+	*/
+	let offsets = [0,1,-1];
+	if (this.activePiece === this.tetromino.I) {
+		offsets.push(2);
+	}
+	for (const offset of offsets) {
+		if (this.isPossible(1,offset)) {
+			return offset;
+		}
+	}
+	return false;
 };
 
 Game.prototype.canRotateCounterClockwise = function () {
+	/*
 	if (this.isPossible(3,0)) {
 		return true;
 	} else {
 		return false;
 	}
+	*/
+	let offsets = [0,-1,1];
+	if (this.activePiece === this.tetromino.I) {
+		offsets.push(2);
+	}
+	for (const offset of offsets) {
+		if (this.isPossible(3,offset)) {
+			return offset;
+		}
+	}
+	return false;
 };
 
 Game.prototype.isPossible = function (orientation,position) {
