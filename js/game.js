@@ -502,16 +502,12 @@ Game.prototype.canMoveDown = function () {
 };
 
 Game.prototype.canRotateClockwise = function () {
-	/*
-	if (this.isPossible(1,0)) {
-		return true;
-	} else {
-		return false;
-	}
-	*/
-	let offsets = [0,1,-1];
-	if (this.activePiece === this.tetromino.I) {
-		offsets.push(2);
+	let offsets = [0];
+	if (settings.useWallkicks) {
+		offsets = [0,1,-1];
+		if (this.activePiece === this.tetromino.I) {
+			offsets.push(2);
+		}
 	}
 	for (const offset of offsets) {
 		if (this.isPossible(1,offset)) {
@@ -522,16 +518,12 @@ Game.prototype.canRotateClockwise = function () {
 };
 
 Game.prototype.canRotateCounterClockwise = function () {
-	/*
-	if (this.isPossible(3,0)) {
-		return true;
-	} else {
-		return false;
-	}
-	*/
-	let offsets = [0,-1,1];
-	if (this.activePiece === this.tetromino.I) {
-		offsets.push(2);
+	let offsets = [0];
+	if (settings.useWallkicks) {
+		offsets = [0,-1,1];
+		if (this.activePiece === this.tetromino.I) {
+			offsets.push(2);
+		}
 	}
 	for (const offset of offsets) {
 		if (this.isPossible(3,offset)) {
@@ -1324,6 +1316,7 @@ Controller.prototype.processInputsLineClearDelay = function () {
 var Settings = function() {
 	this.audioEnabled = true;
 	this.usePentominoes = false;
+	this.useWallkicks = false;
 	this.keyLeft = 37;
 	this.keyRight = 39;
 	this.keyCcw = 90;
@@ -1338,6 +1331,10 @@ Settings.prototype.toggleSound = function () {
 
 Settings.prototype.togglePentominoes = function () {
     this.usePentominoes = !this.usePentominoes;
+};
+
+Settings.prototype.toggleWallkicks = function () {
+    this.useWallkicks = !this.useWallkicks;
 };
 
 var UserInterface = function () {
@@ -1356,6 +1353,7 @@ var UserInterface = function () {
 	this.settingsbutton = document.getElementById('settingsbutton');
 	this.soundtogglebutton = document.getElementById('soundtogglebutton');
     this.pentominotogglebutton = document.getElementById('pentominotogglebutton');
+	this.wallkicktogglebutton = document.getElementById('wallkicktogglebutton');
 	this.keyconfigbutton = document.getElementById('keyconfigbutton');
 	this.confirmkeybindingsbutton = document.getElementById('confirmkeybindingsbutton');
 	this.retrykeybindingsbutton = document.getElementById('retrykeybindingsbutton');
@@ -1387,6 +1385,7 @@ var UserInterface = function () {
 	this.settingsbutton.addEventListener('click', function() { self.showSettings() }, false);
 	this.soundtogglebutton.addEventListener('click', function() { self.toggleSound() }, false);
     this.pentominotogglebutton.addEventListener('click', function() { self.togglePentominoes() }, false);
+	this.wallkicktogglebutton.addEventListener('click', function() { self.toggleWallkicks() }, false);
 	this.keyconfigbutton.addEventListener('click', function() { self.showKeyConfig() }, false);
 	this.confirmkeybindingsbutton.addEventListener('click', function() { self.showSettings() }, false);
 	this.retrykeybindingsbutton.addEventListener('click', function() { self.showKeyConfig() }, false);
@@ -1511,6 +1510,15 @@ UserInterface.prototype.togglePentominoes = function () {
 		this.pentominotogglebutton.innerHTML = 'Use Pentominoes: On';
 	} else {
 		this.pentominotogglebutton.innerHTML = 'Use Pentominoes: Off';
+	}
+};
+
+UserInterface.prototype.toggleWallkicks = function () {
+	settings.toggleWallkicks();
+	if (this.wallkicktogglebutton.innerHTML === 'Use Wallkicks: Off') {
+		this.wallkicktogglebutton.innerHTML = 'Use Wallkicks: On';
+	} else {
+		this.wallkicktogglebutton.innerHTML = 'Use Wallkicks: Off';
 	}
 };
 
